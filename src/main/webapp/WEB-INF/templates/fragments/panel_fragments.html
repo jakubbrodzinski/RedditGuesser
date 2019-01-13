@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<th:block th:fragment="singleLink(linkWeb,details)">
+    <div class="my-3 p-3 bg-white rounded shadow-sm">
+        <div class="card">
+            <div class="card-body pb-1">
+                <h5 class="card-title" th:text="${'Search Date: '+linkWeb.searchDateTime}"></h5>
+                <p class="card-text text-center" th:text="${linkWeb.threadTitle !=null ? linkWeb.threadTitle : 'Thread title was not provided by you'}">This card has supporting text below as a natural lead-in to additional content.</p>
+                <th:block th:if="${linkWeb.percentage!=null}">
+                    <th:block th:if="${details}">
+                        <div class="d-flex justify-content-between">
+                            <form method="post" th:action="@{/account/deleteLink}">
+                                <input type="hidden" name="link" th:value="${linkWeb.hexId}" />
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                                <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" onclick="this.parentNode.submit();">Delete this link</button>
+                            </form>
+                            <p class="card-text"><small class="text-muted" th:text="${'Percentage: ' + linkWeb.percentage+'%'}"></small></p>
+                        </div>
+                    </th:block>
+                    <th:block th:unless="${details}">
+                        <p class="card-text text-right"><small class="text-muted" th:text="${'Percentage: ' + linkWeb.percentage+'%'}"></small></p>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${details || linkWeb.percentage == null}">
+                    <div th:each="commentWeb : ${linkWeb.commentWebList}" th:remove="tag">
+                        <th:block th:replace="fragments/panel_fragments :: singleComment(${commentWeb})" />
+                    </div>
+                </th:block>
+            </div>
+        </div>
+        <th:block th:if="${!details}">
+            <div class="d-flex flex-row-reverse bd-highlight mt-2 mb-1">
+                <div class="p-2 bd-highlight">
+                    <form method="post" th:action="@{/account/deleteLink}">
+                        <input type="hidden" name="link" th:value="${linkWeb.hexId}" />
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                        <button class="btn btn-outline-danger my-2 my-sm-0" type="submit" onclick="this.parentNode.submit();">Delete this link</button>
+                    </form>
+                </div>
+                <th:block th:if="${linkWeb.percentage != null}">
+                    <div class="p-2 bd-highlight">
+                        <a class="btn btn-outline-primary my-2 my-sm-0" th:href="@{'/account/panel/'+${linkWeb.hexId}+'/details'}">Prediction details</a>
+                    </div>
+                </th:block>
+            </div>
+        </th:block>
+    </div>
+</th:block>
+
+<th:block th:fragment="singleComment(commentWeb)">
+    <h6 class="border-bottom border-gray pb-2 mb-0"></h6>
+    <div class="media pt-3">
+        <th:block th:if="${commentWeb.score < 40}">
+            <img th:src="@{/images/darkest.svg}" class="mr-2 mt-1 rounded" />
+        </th:block>
+        <th:block th:unless="${commentWeb.score > 200 or commentWeb.score < 40}">
+            <img th:src="@{/images/middle.svg}" class="mr-2 mt-1 rounded" />
+        </th:block>
+        <th:block th:if="${commentWeb.score > 200}">
+            <img th:src="@{/images/light.svg}" class="mr-2 mt-1 rounded" />
+        </th:block>
+        <p class="media-body pb-2 mb-0 small lh-125 ">
+            <strong class="d-block mb-1 text-gray-dark" th:text="${'Score : '+commentWeb.score + ' point(s)'}">@username</strong>
+            <span class="d-block mb-1" th:text="${commentWeb.body}" />
+            <th:block th:if="${commentWeb.isRemoved==true}">
+                <span class="d-block text-danger">This comment should be removed.</span>
+            </th:block>
+            <th:block th:unless="${commentWeb.isRemoved==true}">
+                <span class="d-block text-success">This comment can stay public</span>
+            </th:block>
+        </p>
+    </div>
+</th:block>
+</body>
+</html>

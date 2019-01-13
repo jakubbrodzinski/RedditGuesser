@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title id="pageTitle">Sign In</title>
+    <div th:replace="fragments/basic :: headerFragment" ></div>
+    <link th:href="@{/css/floating-labels.css}" rel="stylesheet">
+</head>
+
+<body>
+<th:block th:replace="fragments/dashboard :: sticky_navbar('signin')" />
+<form class="form-signin mt-5" method="post" th:action="@{/sign_in}">
+    <div class="text-center mb-4">
+        <img class="mb-4 mt-4" th:src="@{/images/free_logo.jpg}" alt="" height="114" width="102">
+        <h1 class="h3 mb-3 font-weight-normal">Sign In</h1>
+        <p>Gain access to reddit comments predicting mechanism</p>
+    </div>
+
+    <th:block th:if="${accountStatus}">
+        <div th:switch="${accountStatus}" th:remove="tag">
+            <div th:case="${T(bach.project.bean.enums.AccountStatus).OK}" class="text-success mb-3">
+                Account has been successfully created. Check your e-mail for activation link.
+            </div>
+            <div th:case="${T(bach.project.bean.enums.AccountStatus).ACTIVATED}" class="text-success mb-3">
+                Account activated, now you can log in.
+            </div>
+            <div th:case="${T(bach.project.bean.enums.AccountStatus).CHANGED_PASSWORD}" class="text-success mb-3">
+                Password changed.
+            </div>
+            <div th:case="${T(bach.project.bean.enums.AccountStatus).TOKEN_SENT}" class="text-success mb-3">
+                New link was sent, check out inbox.
+            </div>
+            <div th:case="${T(bach.project.bean.enums.AccountStatus).LOGOUT}" class="text-success mb-3">
+                Signed out successfully.
+            </div>
+        </div>
+    </th:block>
+
+    <div class="form-label-group">
+        <th:block th:if="${errorCode}">
+            <input type="email" name="username" id="username" class="form-control is-invalid" placeholder="Email address" required="" autofocus="" th:value="${userName!=null?userName:''}">
+            <label for="username">Email address</label>
+            <div th:switch="${errorCode}" th:remove="tag">
+                <div th:case="${T(bach.project.bean.enums.ErrorCode).WRONG_USERNAME}" class="invalid-feedback">
+                    Wrong e-mail.
+                </div>
+                <div th:case="${T(bach.project.bean.enums.ErrorCode).NOT_ACTIVATED}" class="invalid-feedback">
+                    Your account is not activated, check your e-mail or click <a th:if="${userName}" th:href="@{/resend_token?username=__${userName}__}" >Resend activation email</a>.
+                </div>
+            </div>
+        </th:block>
+        <th:block th:unless="${errorCode}">
+            <input type="email" name="username" id="username" class="form-control" placeholder="Email address" required="" autofocus="" th:value="${userName!=null?userName:''}">
+            <label for="username">Email address</label>
+        </th:block>
+    </div>
+
+    <div class="form-label-group">
+        <th:block th:if="${errorCode}">
+            <input type="password" name="password" id="password" class="form-control is-invalid" placeholder="Password" required="">
+            <label for="password">Password</label>
+            <div th:if="${errorCode==T(bach.project.bean.enums.ErrorCode).WRONG_PASSWORD}" class="invalid-feedback">
+                Wrong username and/or password.
+            </div>
+            <div th:if="${errorCode==T(bach.project.bean.enums.ErrorCode).INVALID_TOKEN}" class="invalid-feedback">
+                Something went wrong... Unvalid link.
+            </div>
+        </th:block>
+        <th:block th:unless="${errorCode}">
+            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required="">
+            <label for="password">Password</label>
+        </th:block>
+    </div>
+
+    <p class="mb-3 text-center">
+        <a th:href="@{/forgot_password}" th:text="${'Forgot password?'}"></a>
+    </p>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <p class="mt-5 mb-3 text-muted text-center">Jakub Brodzinski</p>
+</form>
+</body>
+</html>

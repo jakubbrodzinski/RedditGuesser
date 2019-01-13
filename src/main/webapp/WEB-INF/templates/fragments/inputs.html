@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <th:block th:fragment="input_bt(type,label,fieldname,placeholder)">
+        <label th:for="${fieldname}" th:text="${label}" />
+        <th:block th:if="${#fields.hasErrors('__${fieldname}__')}">
+            <input th:type="${type}" class="form-control is-invalid" th:placeholder="${placeholder}" th:field="*{__${fieldname}__}" required="" />
+            <div th:each="error : ${#fields.errors('__${fieldname}__')}" th:text="${error}" class="invalid-feedback" />
+        </th:block>
+        <th:block th:unless="${#fields.hasErrors('__${fieldname}__')}">
+            <input th:type="${type}" class="form-control" th:placeholder="${placeholder}" th:field="*{__${fieldname}__}" required="" />
+        </th:block>
+    </th:block>
+
+</body>
+</html>

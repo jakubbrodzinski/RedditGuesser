@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title id="pageTitle">Access denied</title>
+    <style>
+        body {
+            background-color: #f1f1f1;
+            margin: 0;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        .container { margin: 50px auto 40px auto; width: 600px; text-align: center; }
+
+        h1 { width: 800px; position:relative; left: -100px; letter-spacing: -1px; line-height: 60px; font-size: 60px; font-weight: 100; margin: 0px 0 50px 0; text-shadow: 0 1px 0 #fff; }
+        p { color: rgba(0, 0, 0, 0.5); margin: 20px 0; line-height: 1.6; }
+
+        @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (   min--moz-device-pixel-ratio: 2),
+        only screen and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (        min-device-pixel-ratio: 2),
+        only screen and (                min-resolution: 192dpi),
+        only screen and (                min-resolution: 2dppx) {
+            .logo-img-1x { display: none; }
+            .logo-img-2x { display: inline-block; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="mt-5 container">
+    <h1>400 Access denied :( </h1>
+    <p>It turns out that you are not enough  authorized<br> to access this page</p>
+    <p>You should try signing in first...</p>
+    <div sec:authorize="hasRole('ROLE_USER')" th:remove="tag">
+        <p><a th:href="@{/account/panel}">Account Panel</a></p>
+    </div>
+    <div sec:authorize="!hasRole('ROLE_USER')" th:remove="tag">
+        <p><a th:href="@{/sign_in}">Sign In</a> / <a th:href="@{/sign_in}">Sign In</a></p>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.springframework.org/schema/security" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+    <th:block th:fragment="sticky_navbar(site)">
+        <div sec:authorize="hasRole('ROLE_USER')" th:remove="tag">
+            <header th:replace="fragments/dashboard :: sticky_navbar_user(__${site}__)" />
+        </div>
+        <div sec:authorize="!hasRole('ROLE_USER')" th:remove="tag">
+            <header th:replace="fragments/dashboard :: sticky_navbar_guest(__${site}__)" />
+        </div>
+    </th:block>
+
+
+    <header th:fragment="sticky_navbar_guest(site)">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" th:href="@{/}">Reddit Guesser</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <th:block th:replace="fragments/dashboard :: navbar_item(${site},'signin','Sign In','/sign_in')" />
+                    <th:block th:replace="fragments/dashboard :: navbar_item(${site},'signup','Sign Up','/sign_up')" />
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <header th:fragment="sticky_navbar_user(site)">
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <a class="navbar-brand" th:href="@{/account/panel}">Reddit Guesser</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav mr-auto">
+                    <th:block th:replace="fragments/dashboard :: navbar_item(${site},'predict','Predict','/account/predict')" />
+                    <th:block th:replace="fragments/dashboard :: navbar_item(${site},'history','History','/account/panel')" />
+                    <th:block th:replace="fragments/dashboard :: navbar_item(${site},'settings','Account Settings','/account/settings')" />
+                </ul>
+                <form class="form-inline mt-2 mt-md-0" method="post" th:action="@{/account/logout}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="this.parentNode.submit();">Logout</button>
+                </form>
+            </div>
+        </nav>
+    </header>
+
+    <th:block th:fragment="navbar_item(site,site_value,text,url)">
+        <th:block th:if="${site==site_value}">
+            <li class="nav-item active">
+                <a class="nav-link" href="#" th:text="${text}">Link text<span class="sr-only">(current)</span></a>
+            </li>
+        </th:block>
+        <th:block th:unless="${site==site_value}">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{ ${url} }" th:text="${text}">Link text</a>
+            </li>
+        </th:block>
+    </th:block>
+
+</body>
+</html>

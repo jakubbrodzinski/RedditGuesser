@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <title id="pageTitle">History panel</title>
+    <div th:replace="fragments/basic :: headerFragment" ></div>
+    <link th:href="@{/css/offcanvas.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+
+</head>
+
+<body class="bg-light">
+<th:block th:replace="fragments/dashboard :: sticky_navbar('pred_details')" />
+<div class="row ml-5 mt-4">
+    <a class="p-2" th:href="@{'/account/panel#'+${linkWeb.hexId}}">
+        <span>
+            <i class="fas mr-md-1 fa-chevron-left"></i>
+        </span>
+        <span class="mr-md-1">Back</span>
+    </a>
+</div>
+<main role="main" class="container mt-nav-6">
+    <th:block th:replace="fragments/panel_fragments :: singleLink(${linkWeb},true)" />
+</main>
+</body>
+</html>
