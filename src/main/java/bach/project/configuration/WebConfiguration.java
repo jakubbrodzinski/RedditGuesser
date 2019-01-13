@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -63,6 +64,7 @@ public class WebConfiguration implements WebMvcConfigurer, ApplicationContextAwa
     }
 
     @Bean
+    @Profile("!integration-testing")
     public RedditClient redditClient(Environment environment) {
         UserAgent userAgent = new UserAgent("botGuesser", "bach.project.utils", "1.0.0-SNAPSHOT", environment.getProperty("reddit.username"));
         Credentials credentials = Credentials.script(environment.getProperty("reddit.username"), environment.getProperty("reddit.password"), environment.getProperty("reddit.clientId"), environment.getProperty("reddit.clientSecret"));
