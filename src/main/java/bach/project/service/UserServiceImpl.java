@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -93,6 +94,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void removeUser(String userName) {
+        if(userRepository.existsByUserName(userName))
+            userRepository.removeUserByUserName(userName);
+    }
+
+    @Override
     public void changePassword(User user,String plainTextPassword) {
         userRepository.findById(user.getId()).ifPresent(u->{
             u.setPassword(pbkdf2PasswordEncoder.encode(plainTextPassword));
@@ -113,5 +120,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByObjectId(ObjectId objectId) {
         return userRepository.findById(objectId).get();
+    }
+
+    @Override
+    public Optional<User> getUserByUserName(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }

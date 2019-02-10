@@ -1,6 +1,6 @@
 package bach.project.bean.annotation;
 
-import bach.project.utils.RegexpValidator;
+import bach.project.bean.validators.RegexpValidator;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

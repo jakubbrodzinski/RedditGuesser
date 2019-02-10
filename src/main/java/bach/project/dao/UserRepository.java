@@ -11,5 +11,6 @@ public interface UserRepository extends MongoRepository<User, ObjectId> {
     boolean existsByUserName(String userName);
     Optional<User> findByActivationToken(String activationToken);
     Optional<User> findByPasswordResetToken(String passwordResetToken);
+    void removeUserByUserName(String userName);
 
 }

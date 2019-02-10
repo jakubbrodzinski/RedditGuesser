@@ -1,6 +1,10 @@
 package bach.project.configuration;
 
+import bach.project.apis.CommentAPIConnector;
+import bach.project.apis.RedditAPIConnector;
 import bach.project.configuration.handlers.SignedInInterceptor;
+import bach.project.apis.APIConnector;
+import bach.project.apis.APIConnectorImpl;
 import net.dean.jraw.RedditClient;
 import net.dean.jraw.http.NetworkAdapter;
 import net.dean.jraw.http.OkHttpNetworkAdapter;
@@ -74,5 +78,17 @@ public class WebConfiguration implements WebMvcConfigurer, ApplicationContextAwa
         redditClient.setAutoRenew(true);
 
         return redditClient;
+    }
+
+    @Bean
+    @Profile("!integration-testing")
+    public APIConnector apiConnector(){
+        return new APIConnectorImpl();
+    }
+
+    @Bean
+    @Profile("!integration-testing")
+    public CommentAPIConnector commentAPIConnector(RedditClient redditClient){
+        return new RedditAPIConnector(redditClient);
     }
 }

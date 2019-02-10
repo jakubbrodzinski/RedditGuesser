@@ -6,5 +6,5 @@ import java.util.Optional;
 
 public interface PredictionService {
     void predictSingleComment(User user, Optional<String> threadTitle, String singleComment);
-    void predictWholeLink(User user,String link,int percentage,int ammount);
+    void predictWholeLink(User user,String link,int percentage,int amount);
 }
