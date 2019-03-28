@@ -18,7 +18,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @ExtendWith(SpringExtension.class)
 @ActiveProfiles(profiles = {"integration-testing"})
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@WebAppConfiguration
+@AutoConfigureMockMvc
+@SpringBootTest
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class IntegrationMVCTesting {
 
