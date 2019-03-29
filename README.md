@@ -1,4 +1,4 @@
-# ml_webapp
+# Reddit Guesser
 Machine learning approach based solution for searching quality / up-and-coming comments on Reddit platform using Boosted Decision Trees.
 
 System consist of:
