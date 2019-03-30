@@ -3,8 +3,8 @@ services:
   mongo:
     image: "mongo"
     restart: always
-    ports: 
-      - 27017:27017
+    # ports: 
+    #   - 27017:27017
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=jbjb123
@@ -14,6 +14,8 @@ services:
 
   mongo-express:
     image: "mongo-express"
+    depends_on:
+      - mongo
     restart: always
     ports: 
       - 8081:8081
@@ -27,8 +29,12 @@ services:
       - 8123:8123
 
   ml_webapp:
-      image: "docker/bach.project/mlwebapp"
-      ports:
-        - 8080:8080
-
-
+    image: "docker/bach.project/mlwebapp"
+    environment:
+      - MONGODB_HOST=mongo
+      - MONGODB_PORT=27017
+    ports:
+      - 8080:8080
+    depends_on:
+      - mongo
+      - ml_rest

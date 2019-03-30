@@ -4,4 +4,11 @@ ARG DEPENDENCY=target/dependency
 COPY ${DEPENDENCY}/BOOT-INF/lib /ml_webapp/lib
 COPY ${DEPENDENCY}/META-INF /ml_webapp/META-INF
 COPY ${DEPENDENCY}/BOOT-INF/classes /ml_webapp
-ENTRYPOINT ["java","-cp","ml_webapp:ml_webapp/lib/*","bach.project.configuration.Application"]
+
+EXPOSE 8080/tcp
+
+ADD run.sh run.sh
+RUN chmod a+x run.sh
+
+CMD ./run.sh
+
